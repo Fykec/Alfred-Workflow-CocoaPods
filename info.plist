@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.alfredapp.cocoapods</string>
+	<key>category</key>
+	<string>Internet</string>
+	<key>connections</key>
+	<dict>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>FE87D5F0-9ADA-4B88-BDD0-30251ADF8F9F</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Foster Yin</string>
+	<key>description</key>
+	<string>Get CocoaPods Search Suggestions</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>CocoaPods Search</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>plusspaces</key>
+				<false/>
+				<key>url</key>
+				<string>https://cocoapods.org/?q={query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>FE87D5F0-9ADA-4B88-BDD0-30251ADF8F9F</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>36</integer>
+				<key>keyword</key>
+				<string>cocoapods</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Retrieving search suggestions ...</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+$wf = new Workflows();
+
+
+$orig = "{query}";
+
+$res = $wf-&gt;request( "https://search.cocoapods.org/api/v1/pods.picky.hash.json?ids=20&amp;offset=0&amp;sort=quality&amp;query=".urlencode( $orig ) );
+$res = json_decode($res);
+$pods = end(current($res-&gt;{"allocations"}));
+$int = 1;
+
+foreach( $pods as $pod ):
+
+         $data = $pod-&gt;{'id'};
+               $wf-&gt;result( $int.'.'.time(), "$data", "$data", $pod-&gt;{'summary'}, 'icon.png'  );
+                            $int++;
+                            endforeach;
+
+$results = $wf-&gt;results();
+if ( count( $results ) == 0 ):
+   $wf-&gt;result( 'cocoapodsuggest', $orig, 'No Suggestions', 'No search suggestions found. Search CocoaPods for '.$orig, 'icon.png' );
+   endif;
+
+echo $wf-&gt;toxml();</string>
+				<key>subtext</key>
+				<string>Search CocoaPods</string>
+				<key>title</key>
+				<string>Search CocoaPods</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>63F60794-BB56-4415-9372-BAF974C3A7E1</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<dict>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+		<key>FE87D5F0-9ADA-4B88-BDD0-30251ADF8F9F</key>
+		<dict>
+			<key>ypos</key>
+			<real>60</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>yinjiaji.com</string>
+</dict>
+</plist>
