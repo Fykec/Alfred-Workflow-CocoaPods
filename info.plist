@@ -36,7 +36,7 @@
 				<key>plusspaces</key>
 				<false/>
 				<key>url</key>
-				<string>https://cocoapods.org/?q={query}</string>
+				<string>{query}</string>
 				<key>utf8</key>
 				<true/>
 			</dict>
@@ -55,7 +55,7 @@
 				<key>escaping</key>
 				<integer>36</integer>
 				<key>keyword</key>
-				<string>cocoapods</string>
+				<string>pod</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -65,9 +65,10 @@
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string>Retrieving search suggestions ...</string>
+				<string>Searching Pods ...</string>
 				<key>script</key>
-				<string>require_once('workflows.php');
+				<string>
+require_once('workflows.php');
 $wf = new Workflows();
 
 
@@ -75,22 +76,21 @@ $orig = "{query}";
 
 $res = $wf-&gt;request( "https://search.cocoapods.org/api/v1/pods.picky.hash.json?ids=20&amp;offset=0&amp;sort=quality&amp;query=".urlencode( $orig ) );
 $res = json_decode($res);
-$pods = end(current($res-&gt;{"allocations"}));
+$pods = end( current( $res-&gt;{"allocations"} ) );
 $int = 1;
 
 foreach( $pods as $pod ):
-
-         $data = $pod-&gt;{'id'};
-               $wf-&gt;result( $int.'.'.time(), "$data", "$data", $pod-&gt;{'summary'}, 'icon.png'  );
-                            $int++;
-                            endforeach;
+    $wf-&gt;result( $int.'.'.time(), $pod-&gt;{'link'}, $pod-&gt;{'id'}, $pod-&gt;{'summary'}, 'icon.png' );
+$int++;
+endforeach;
 
 $results = $wf-&gt;results();
 if ( count( $results ) == 0 ):
-   $wf-&gt;result( 'cocoapodsuggest', $orig, 'No Suggestions', 'No search suggestions found. Search CocoaPods for '.$orig, 'icon.png' );
-   endif;
+    $wf-&gt;result( 'cocoapodsuggest', $orig, 'No Suggestions', 'No search suggestions found. Search CocoaPods for '.$orig, 'icon.png' );
+endif;
 
-echo $wf-&gt;toxml();</string>
+echo $wf-&gt;toxml();
+</string>
 				<key>subtext</key>
 				<string>Search CocoaPods</string>
 				<key>title</key>
